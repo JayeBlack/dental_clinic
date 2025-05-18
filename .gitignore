@@ -1,6 +1,6 @@
 # Environment variables
 .env
-
+fernet_keys.py
 # Python and Django
 *.pyc
 __pycache__/
