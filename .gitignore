@@ -1,0 +1,33 @@
+# Environment variables
+.env
+
+# Python and Django
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+*.env
+
+# Django migrations (exclude migration files)
+**/migrations/*.py
+# Keep __init__.py in migrations
+!**/migrations/__init__.py
+
+# Database
+*.sqlite3
+
+# Media files (e.g., NHIS CSV exports)
+media/
+
+# PyCharm and IDE
+.idea/
+*.iml
+
+# Logs
+*.log
+
+# Static files (if collected)
+static/
