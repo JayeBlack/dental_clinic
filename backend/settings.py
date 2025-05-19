@@ -1,10 +1,12 @@
 import os
+import sys
 from pathlib import Path
-
 from decouple import config
+from cryptography.fernet import Fernet
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Add the project root to the Python path
 BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.append(str(BASE_DIR))
 
 # Quick-start development settings - unsuitable for production
 SECRET_KEY = config('SECRET_KEY')
@@ -14,23 +16,22 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
-    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.auth',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Third-party apps
     'rest_framework',
     'rest_framework_simplejwt',
-    'django_fernet_fields',
     'celery',
-    # Your apps (inside apps directory)
-    'apps.auth',
-    'apps.patients',
-    'apps.appointments',
-    'apps.insurance',
-    'apps.billing',
-    'apps.notifications',
+    # Your apps (inside backend/apps directory)
+    'backend.apps.clinic_auth',
+    # 'backend.apps.patients',
+    # 'backend.apps.appointments',
+    # 'backend.apps.insurance',/
+    # 'backend.apps.billing',
+    # 'backend.apps.notifications',
 ]
 
 MIDDLEWARE = [
@@ -68,10 +69,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('DB_NAME'),
-        'USER': config('USER'),
-        'PASSWORD': config('PASSWORD'),
-        'HOST': config('HOST'),
-        'PORT': config('PORT'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
     }
 }
 
@@ -98,7 +99,7 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-# STATIC_URL = 'static/'
+STATIC_URL = 'static/'
 # STATIC_ROOT = BASE_DIR / 'static'
 
 # Media files (e.g., CSV exports for NHIS claims)
@@ -109,7 +110,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom user model
-AUTH_USER_MODEL = 'auth.User'  # Use custom User model from auth app
+AUTH_USER_MODEL = 'clinic_auth.User'  # Use custom User model from backend.apps.auth
 
 # Django REST Framework
 REST_FRAMEWORK = {
@@ -121,10 +122,9 @@ REST_FRAMEWORK = {
     ],
 }
 
-# Fernet Fields (for encryption)
-FERNET_KEYS = [
-    config('FERNET_KEY'),  # Replace with a secure key
-]
+# Fernet Encryption Setup
+FERNET_KEY = config('FERNET_KEY')  # Ensure this is a valid Fernet key in .env
+FERNET = Fernet(FERNET_KEY.encode())  # Initialize Fernet with the key
 
 # Celery Configuration
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
