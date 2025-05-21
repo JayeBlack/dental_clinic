@@ -18,7 +18,12 @@ class Patient(models.Model):
 
     def decrypt_nhis_number(self):
         """Decrypt the NHIS number using Fernet."""
-        decrypted = settings.FERNET.decrypt(self.nhis_number).decode()
+        # Ensure nhis_number is bytes
+        if not isinstance(self.nhis_number, bytes):
+            nhis_bytes = bytes(self.nhis_number)
+        else:
+            nhis_bytes = self.nhis_number
+        decrypted = settings.FERNET.decrypt(nhis_bytes).decode()
         return decrypted
 
     def __str__(self):
