@@ -1,5 +1,6 @@
 import os
 import sys
+from datetime import timedelta
 from pathlib import Path
 from decouple import config
 from cryptography.fernet import Fernet
@@ -27,7 +28,7 @@ INSTALLED_APPS = [
     'celery',
     # Your apps (inside backend/apps directory)
     'backend.apps.clinic_auth',
-    # 'backend.apps.patients',
+    'backend.apps.patients',
     # 'backend.apps.appointments',
     # 'backend.apps.insurance',/
     # 'backend.apps.billing',
@@ -119,6 +120,9 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PERMISSION_CLASSES': [
     ],
+    'SIMPLE_JWT': {
+        'ACCESS_TOKEN-LIFETIME': timedelta(hours=1)
+    }
 }
 
 # Fernet Encryption Setup
