@@ -21,6 +21,7 @@ class PatientRetrieveView(generics.RetrieveAPIView):
     serializer_class = PatientSerializer
     permission_classes = [PatientPermission]
 
+
 class PatientDeleteView(generics.DestroyAPIView):
     queryset = Patient.objects.all()
     permission_classes = [PatientPermission]
