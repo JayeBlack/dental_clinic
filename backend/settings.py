@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     # Your apps (inside backend/apps directory)
     'backend.apps.clinic_auth',
     'backend.apps.patients',
-    # 'backend.apps.appointments',
+    'backend.apps.appointments',
     # 'backend.apps.insurance',/
     # 'backend.apps.billing',
     # 'backend.apps.notifications',
