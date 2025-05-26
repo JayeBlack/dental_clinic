@@ -1,7 +1,6 @@
 from rest_framework import permissions
 from rest_framework.generics import RetrieveAPIView
 
-
 class AppointmentPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
@@ -14,7 +13,10 @@ class AppointmentPermission(permissions.BasePermission):
         # Determine the action based on the view's method
         action = None
         if request.method == 'POST':
-            action = 'create'
+            if 'payments/process' in request.path:
+                action = 'payment'
+            else:
+                action = 'create'
         elif request.method == 'GET':
             if isinstance(view, RetrieveAPIView):
                 action = 'retrieve'
@@ -38,12 +40,16 @@ class AppointmentPermission(permissions.BasePermission):
         if action == 'retrieve':
             return request.user.role in ['admin', 'doctor', 'nurse']
 
-        # Update: Only admin (for insurance and appointments)
+        # Update: Only admin
         if action == 'update':
             return request.user.role == 'admin'
 
         # Cancel: Only admin and doctor
         if action == 'cancel':
             return request.user.role in ['admin', 'doctor']
+
+        # Payment: Only admin and receptionist
+        if action == 'payment':
+            return request.user.role in ['admin', 'receptionist']
 
         return False
