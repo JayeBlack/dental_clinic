@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'backend.apps.clinic_auth',
     'backend.apps.patients',
     'backend.apps.appointments',
-    # 'backend.apps.insurance',/
+    'backend.apps.insurance',
     # 'backend.apps.billing',
     # 'backend.apps.notifications',
 ]
