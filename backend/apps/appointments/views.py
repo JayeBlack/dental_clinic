@@ -6,25 +6,30 @@ from .models import Appointment
 from .serializers import AppointmentSerializer
 from .permissions import AppointmentPermission
 
+
 class AppointmentCreateView(generics.CreateAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
     permission_classes = [AppointmentPermission]
+
 
 class AppointmentListView(generics.ListAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
     permission_classes = [AppointmentPermission]
 
+
 class AppointmentRetrieveView(generics.RetrieveAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
     permission_classes = [AppointmentPermission]
 
+
 class AppointmentUpdateView(generics.UpdateAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
     permission_classes = [AppointmentPermission]
+
 
 class AppointmentCancelView(generics.UpdateAPIView):
     queryset = Appointment.objects.all()
