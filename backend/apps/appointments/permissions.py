@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from rest_framework.generics import RetrieveAPIView  # Correct import
+from rest_framework.generics import RetrieveAPIView
 
 
 class AppointmentPermission(permissions.BasePermission):
@@ -38,8 +38,12 @@ class AppointmentPermission(permissions.BasePermission):
         if action == 'retrieve':
             return request.user.role in ['admin', 'doctor', 'nurse']
 
-        # Update/Cancel: Only admin and doctor
-        if action in ['update', 'cancel']:
+        # Update: Only admin (for insurance and appointments)
+        if action == 'update':
+            return request.user.role == 'admin'
+
+        # Cancel: Only admin and doctor
+        if action == 'cancel':
             return request.user.role in ['admin', 'doctor']
 
         return False
