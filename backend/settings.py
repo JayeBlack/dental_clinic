@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'backend.apps.patients',
     'backend.apps.appointments',
     'backend.apps.insurance',
-    # 'backend.apps.billing',
+    'backend.apps.billing',
     # 'backend.apps.notifications',
 ]
 
