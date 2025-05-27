@@ -5,6 +5,7 @@ import backend.apps.patients.urls
 import backend.apps.appointments.urls
 import backend.apps.insurance.urls
 import backend.apps.billing.urls
+import backend.apps.notifications.urls
 
 
 urlpatterns = [
@@ -14,4 +15,5 @@ urlpatterns = [
     path('api/appointments/', include(backend.apps.appointments.urls)),
     path('api/insurance/', include(backend.apps.insurance.urls)),
     path('api/billing/', include(backend.apps.billing.urls)),
+    path('api/notification/', include(backend.apps.notifications.urls))
 ]
