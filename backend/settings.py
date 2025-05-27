@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     'backend.apps.appointments',
     'backend.apps.insurance',
     'backend.apps.billing',
-    # 'backend.apps.notifications',
+    'backend.apps.notifications',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +136,12 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Africa/Accra'
+
+# SendGrid Configuration
+SENDGRID_API_KEY = config('SENDGRID_API_KEY')
+FROM_EMAIL = config('FROM_EMAIL')
+
+# Twilio Configuration
+# TWILIO_ACCOUNT_SID = config('TWILIO_ACCOUNT_SID')
+# TWILIO_AUTH_TOKEN = config('TWILIO_AUTH_TOKEN')
+# TWILIO_PHONE_NUMBER = config('TWILIO_PHONE_NUMBER')
