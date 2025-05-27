@@ -1,11 +1,13 @@
 from django.db import models
 from django.conf import settings
 
+
 class Patient(models.Model):
     full_name = models.CharField(max_length=100)
     date_of_birth = models.DateField()
+    email = models.EmailField(max_length=255, blank=True)  # Added for notifications
     phone_number = models.CharField(max_length=15)
-    nhis_number = models.BinaryField()  # Store encrypted NHIS number
+    nhis_number = models.BinaryField()
     address = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -18,7 +20,6 @@ class Patient(models.Model):
 
     def decrypt_nhis_number(self):
         """Decrypt the NHIS number using Fernet."""
-        # Ensure nhis_number is bytes
         if not isinstance(self.nhis_number, bytes):
             nhis_bytes = bytes(self.nhis_number)
         else:
