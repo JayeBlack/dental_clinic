@@ -3,9 +3,9 @@ from django.db import models
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, phone_number, full_name, role, password=None, **extra_fields):
+    def create_user(self, phone_number, full_name, role, username=None, password=None, **extra_fields):
         """
-        Create and save a regular user with the given phone number, full name, and role.
+        Create and save a regular user with the given phone number, full name, role, and optional username.
         """
         if not phone_number:
             raise ValueError("The Phone Number must be set")
@@ -16,6 +16,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', False)
         user = self.model(
             phone_number=phone_number,
+            username=username,
             full_name=full_name,
             role=role,
             **extra_fields
@@ -24,9 +25,9 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, phone_number, full_name, role, password=None, **extra_fields):
+    def create_superuser(self, phone_number, full_name, role, username=None, password=None, **extra_fields):
         """
-        Create and save a superuser with the given phone number, full name, and role.
+        Create and save a superuser with the given phone number, full name, role, and optional username.
         """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
@@ -36,7 +37,7 @@ class UserManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
 
-        return self.create_user(phone_number, full_name, role, password, **extra_fields)
+        return self.create_user(phone_number, full_name, role, username, password, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -48,6 +49,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     ]
 
     phone_number = models.CharField(max_length=15, unique=True)
+    username = models.CharField(max_length=150, unique=True, blank=True, null=True)  # Added username field
     full_name = models.CharField(max_length=100)
     role = models.CharField(max_length=50, choices=ROLE_CHOICES)
     is_active = models.BooleanField(default=True)
@@ -61,13 +63,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     # Customize related_name for groups and user_permissions
     groups = models.ManyToManyField(
         'auth.Group',
-        related_name='clinic_users',  # Unique related_name
+        related_name='clinic_users',
         blank=True,
         help_text='The groups this user belongs to.',
     )
     user_permissions = models.ManyToManyField(
         'auth.Permission',
-        related_name='clinic_user_permissions',  # Unique related_name
+        related_name='clinic_user_permissions',
         blank=True,
         help_text='Specific permissions for this user.',
     )

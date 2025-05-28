@@ -12,8 +12,12 @@ sys.path.append(str(BASE_DIR))
 # Quick-start development settings - unsuitable for production
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = True
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
+# ALLOWED_HOSTS = [
+#     'localhost',
+#     '127.0.0.1',
+#     '7187-154-161-18-101.ngrok-free.app',  # Your Ngrok domain here (no https)
+# ]
+ALLOWED_HOSTS = ['*']
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -33,6 +37,7 @@ INSTALLED_APPS = [
     'backend.apps.insurance',
     'backend.apps.billing',
     'backend.apps.notifications',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -43,8 +48,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'backend.apps.clinic_auth.backends.PhoneOrUsernameModelBackend',
+    'django.contrib.auth.backends.ModelBackend',  # Keep for admin
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
