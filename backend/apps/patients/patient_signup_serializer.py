@@ -1,33 +1,6 @@
 from rest_framework import serializers
-from .models import Patient
 from backend.apps.clinic_auth.models import User
-
-
-class PatientSerializer(serializers.ModelSerializer):
-    nhis_number = serializers.CharField(write_only=True)  # Encrypted on save
-
-    class Meta:
-        model = Patient
-        fields = ['id', 'full_name', 'date_of_birth', 'phone_number', 'nhis_number', 'address', 'created_at',
-                  'updated_at']
-        read_only_fields = ['id', 'created_at', 'updated_at']
-
-    def create(self, validated_data):
-        patient = Patient(
-            full_name=validated_data['full_name'],
-            date_of_birth=validated_data['date_of_birth'],
-            phone_number=validated_data['phone_number'],
-            address=validated_data.get('address', '')
-        )
-        patient.encrypt_nhis_number(validated_data['nhis_number'])
-        patient.save()
-        return patient
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        data['nhis_number'] = instance.decrypt_nhis_number()  # Decrypt for display
-        return data
-
+from backend.apps.patients.models import Patient
 
 class PatientSignupSerializer(serializers.Serializer):
     phone_number = serializers.CharField(max_length=15)
@@ -40,6 +13,7 @@ class PatientSignupSerializer(serializers.Serializer):
     email = serializers.EmailField(required=False, allow_blank=True)
 
     def validate(self, attrs):
+        # Ensure phone_number is unique for User
         if User.objects.filter(phone_number=attrs['phone_number']).exists():
             raise serializers.ValidationError({'phone_number': 'A user with this phone number already exists.'})
         return attrs

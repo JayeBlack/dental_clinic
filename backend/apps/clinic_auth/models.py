@@ -46,6 +46,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('doctor', 'Doctor'),
         ('nurse', 'Nurse'),
         ('receptionist', 'Receptionist'),
+        ('patient', 'Patient'),  # Added patient role
     ]
 
     phone_number = models.CharField(max_length=15, unique=True)

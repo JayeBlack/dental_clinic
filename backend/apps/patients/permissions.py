@@ -19,10 +19,12 @@ class PatientPermission(permissions.BasePermission):
                 action = 'retrieve'
             else:
                 action = 'list'
+        elif request.method == 'DELETE':
+            action = 'delete'
 
-        # Create: Only admin and receptionist
+        # Create: Only admin
         if action == 'create':
-            return request.user.role in ['admin', 'receptionist']
+            return request.user.role == 'admin'
 
         # List/Retrieve: Allow admin, doctor, nurse
         if action in ['list', 'retrieve']:
