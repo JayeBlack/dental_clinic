@@ -31,3 +31,6 @@ media/
 
 # Static files (if collected)
 static/
+
+# Node.js
+node_modules/
