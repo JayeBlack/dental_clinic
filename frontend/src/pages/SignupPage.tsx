@@ -9,9 +9,10 @@ import {
   Typography,
   Alert,
   Link,
-  Grid,
   Divider,
+  Grid,
 } from '@mui/material';
+// @ts-ignore
 import { LocalHospital } from '@mui/icons-material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import api from '../config/api';
@@ -104,8 +105,8 @@ const SignupPage: React.FC = () => {
             )}
 
             <Box component="form" onSubmit={handleSubmit}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
+              <Grid container columns={12} spacing={2}>
+                <Grid sx={{ gridColumn: 'span 12' }}>
                   <TextField
                     fullWidth
                     label="Full Name"
@@ -115,7 +116,7 @@ const SignupPage: React.FC = () => {
                     required
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
                   <TextField
                     fullWidth
                     label="Email"
@@ -125,7 +126,7 @@ const SignupPage: React.FC = () => {
                     onChange={handleChange}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
                   <TextField
                     fullWidth
                     label="Phone Number"
@@ -135,7 +136,7 @@ const SignupPage: React.FC = () => {
                     required
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
                   <TextField
                     fullWidth
                     label="Date of Birth"
@@ -146,7 +147,7 @@ const SignupPage: React.FC = () => {
                     required
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
                   <TextField
                     fullWidth
                     label="NHIS Number"
@@ -156,7 +157,7 @@ const SignupPage: React.FC = () => {
                     required
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid sx={{ gridColumn: 'span 12' }}>
                   <TextField
                     fullWidth
                     label="Address"
@@ -167,13 +168,13 @@ const SignupPage: React.FC = () => {
                     onChange={handleChange}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid sx={{ gridColumn: 'span 12' }}>
                   <Divider sx={{ my: 2 }} />
                   <Typography variant="h6" gutterBottom>
                     Account Credentials
                   </Typography>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid sx={{ gridColumn: 'span 12' }}>
                   <TextField
                     fullWidth
                     label="Username (optional)"
@@ -182,7 +183,7 @@ const SignupPage: React.FC = () => {
                     onChange={handleChange}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
                   <TextField
                     fullWidth
                     label="Password"
@@ -193,7 +194,7 @@ const SignupPage: React.FC = () => {
                     required
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
                   <TextField
                     fullWidth
                     label="Confirm Password"

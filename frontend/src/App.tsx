@@ -1,4 +1,3 @@
-
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -13,6 +12,13 @@ import SignupPage from './pages/SignupPage';
 import DashboardPage from './pages/DashboardPage';
 import UnauthorizedPage from './pages/UnauthorizedPage';
 import NotFound from "./pages/NotFound";
+import BillingPage from './pages/BillingPage';
+import NotificationsPage from './pages/NotificationsPage';
+import PatientProfilePage from './pages/PatientProfilePage';
+import AppointmentsPage from './pages/AppointmentsPage';
+import PatientsPage from './pages/PatientsPage';
+import ReportsPage from './pages/ReportsPage';
+import SettingsPage from './pages/SettingsPage';
 
 const queryClient = new QueryClient();
 
@@ -37,35 +43,59 @@ const App = () => (
               </ProtectedRoute>
             } />
             
-            {/* Placeholder routes for future implementation */}
+            {/* Patients */}
             <Route path="/patients" element={
               <ProtectedRoute allowedRoles={['admin', 'doctor', 'nurse']}>
                 <DashboardLayout>
-                  <div>Patients page - Coming soon</div>
+                  <PatientsPage />
                 </DashboardLayout>
               </ProtectedRoute>
             } />
-            
+            {/* Patient Profile */}
+            <Route path="/patients/:id" element={
+              <ProtectedRoute allowedRoles={['admin', 'doctor', 'nurse']}>
+                <DashboardLayout>
+                  <PatientProfilePage />
+                </DashboardLayout>
+              </ProtectedRoute>
+            } />
+            {/* Appointments */}
             <Route path="/appointments" element={
               <ProtectedRoute allowedRoles={['admin', 'doctor', 'nurse', 'receptionist']}>
                 <DashboardLayout>
-                  <div>Appointments page - Coming soon</div>
+                  <AppointmentsPage />
                 </DashboardLayout>
               </ProtectedRoute>
             } />
-            
+            {/* Billing */}
             <Route path="/billing" element={
               <ProtectedRoute allowedRoles={['admin']}>
                 <DashboardLayout>
-                  <div>Billing page - Coming soon</div>
+                  <BillingPage />
                 </DashboardLayout>
               </ProtectedRoute>
             } />
-            
+            {/* Notifications */}
             <Route path="/notifications" element={
-              <ProtectedRoute allowedRoles={['admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'doctor', 'nurse', 'receptionist']}>
                 <DashboardLayout>
-                  <div>Notifications page - Coming soon</div>
+                  <NotificationsPage />
+                </DashboardLayout>
+              </ProtectedRoute>
+            } />
+            {/* Reports */}
+            <Route path="/reports" element={
+              <ProtectedRoute allowedRoles={['admin', 'doctor']}>
+                <DashboardLayout>
+                  <ReportsPage />
+                </DashboardLayout>
+              </ProtectedRoute>
+            } />
+            {/* Settings */}
+            <Route path="/settings" element={
+              <ProtectedRoute allowedRoles={['admin', 'doctor', 'nurse', 'receptionist']}>
+                <DashboardLayout>
+                  <SettingsPage />
                 </DashboardLayout>
               </ProtectedRoute>
             } />
