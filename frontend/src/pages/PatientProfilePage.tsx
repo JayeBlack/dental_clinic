@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -37,7 +37,8 @@ import {
   Medication,
   Warning,
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import api from '../config/api';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -61,100 +62,43 @@ function TabPanel(props: TabPanelProps) {
 
 const PatientProfilePage: React.FC = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [tabValue, setTabValue] = useState(0);
+  const [patient, setPatient] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // Mock patient data - in real app, fetch based on ID
-  const patient = {
-    id: 1,
-    name: 'John Doe',
-    email: 'john.doe@email.com',
-    phone: '+1 (555) 123-4567',
-    dateOfBirth: '1985-06-15',
-    gender: 'Male',
-    address: '123 Main St, City, State 12345',
-    emergencyContact: 'Jane Doe - (555) 987-6543',
-    registrationDate: '2023-01-15',
-    status: 'active',
-    insurance: 'Blue Cross Blue Shield',
-    policyNumber: 'BC123456789',
-  };
+  // Add these states for fetched arrays
+  const [appointments, setAppointments] = useState<any[]>([]);
+  const [treatments, setTreatments] = useState<any[]>([]);
+  const [allergies, setAllergies] = useState<string[]>([]);
+  const [medicalConditions, setMedicalConditions] = useState<string[]>([]);
+  const [medications, setMedications] = useState<any[]>([]);
+  const [invoices, setInvoices] = useState<any[]>([]);
 
-  const appointments = [
-    {
-      id: 1,
-      date: '2024-02-15',
-      time: '10:00 AM',
-      type: 'Routine Checkup',
-      doctor: 'Dr. Smith',
-      status: 'scheduled',
-    },
-    {
-      id: 2,
-      date: '2024-01-15',
-      time: '2:00 PM',
-      type: 'Dental Cleaning',
-      doctor: 'Dr. Johnson',
-      status: 'completed',
-    },
-    {
-      id: 3,
-      date: '2023-12-10',
-      time: '11:30 AM',
-      type: 'Consultation',
-      doctor: 'Dr. Smith',
-      status: 'completed',
-    },
-  ];
+  useEffect(() => {
+    const fetchPatient = async () => {
+      try {
+        const response = await api.get(`/api/patients/retrieve/${id}/`);
+        setPatient(response.data);
+        // If your backend returns these as part of the patient object, set them here:
+        setAppointments(response.data.appointments || []);
+        setTreatments(response.data.treatments || []);
+        setAllergies(response.data.allergies || []);
+        setMedicalConditions(response.data.medicalConditions || []);
+        setMedications(response.data.medications || []);
+        setInvoices(response.data.invoices || []);
+      } catch (err: any) {
+        setError('Failed to load patient data');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPatient();
+  }, [id]);
 
-  const treatments = [
-    {
-      id: 1,
-      date: '2024-01-15',
-      treatment: 'Dental Cleaning',
-      doctor: 'Dr. Johnson',
-      notes: 'Regular cleaning completed. Good oral hygiene.',
-      cost: 150,
-    },
-    {
-      id: 2,
-      date: '2023-12-10',
-      treatment: 'Initial Consultation',
-      doctor: 'Dr. Smith',
-      notes: 'Initial examination. Recommended regular cleanings.',
-      cost: 75,
-    },
-  ];
-
-  const medications = [
-    {
-      name: 'Amoxicillin',
-      dosage: '500mg',
-      frequency: '3 times daily',
-      prescribed: '2024-01-15',
-      duration: '7 days',
-    },
-  ];
-
-  const allergies = ['Penicillin', 'Latex'];
-
-  const medicalConditions = ['Hypertension', 'Diabetes Type 2'];
-
-  const invoices = [
-    {
-      id: 'INV-001',
-      date: '2024-01-15',
-      amount: 150,
-      status: 'paid',
-      description: 'Dental Cleaning',
-    },
-    {
-      id: 'INV-002',
-      date: '2023-12-10',
-      amount: 75,
-      status: 'paid',
-      description: 'Initial Consultation',
-    },
-  ];
+  if (loading) return <Typography>Loading...</Typography>;
+  if (error) return <Typography color="error">{error}</Typography>;
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -186,7 +130,7 @@ const PatientProfilePage: React.FC = () => {
         </IconButton>
         <Box sx={{ flexGrow: 1 }}>
           <Typography variant="h4" gutterBottom>
-            Patient Profile
+            {patient?.name || ''}
           </Typography>
           <Typography variant="body1" color="text.secondary">
             Complete patient information and medical history
@@ -197,21 +141,31 @@ const PatientProfilePage: React.FC = () => {
         </Button>
       </Box>
 
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 2fr' }, gap: 3 }}>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: {
+            xs: '1fr',
+            sm: '1fr',
+            md: '1fr 1fr 2fr',
+          },
+          gap: 3,
+        }}
+      >
         {/* Patient Info Card */}
-        <Box sx={{ gridColumn: { xs: '1', md: '1' } }}>
+        <Box sx={{ gridColumn: { xs: '1', sm: '1', md: '1' } }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
                 <Avatar sx={{ width: 80, height: 80, mb: 2, fontSize: '2rem' }}>
-                  {patient.name.split(' ').map(n => n[0]).join('')}
+                  {patient?.name?.split(' ').map((n: string) => n[0]).join('')}
                 </Avatar>
                 <Typography variant="h5" gutterBottom>
-                  {patient.name}
+                  {patient?.name}
                 </Typography>
                 <Chip
-                  label={patient.status}
-                  color={getStatusColor(patient.status) as any}
+                  label={patient?.status}
+                  color={getStatusColor(patient?.status) as any}
                   size="small"
                 />
               </Box>
@@ -223,46 +177,31 @@ const PatientProfilePage: React.FC = () => {
                   <ListItemIcon>
                     <Email />
                   </ListItemIcon>
-                  <ListItemText
-                    primary="Email"
-                    secondary={patient.email}
-                  />
+                  <ListItemText primary="Email" secondary={patient?.email} />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
                     <Phone />
                   </ListItemIcon>
-                  <ListItemText
-                    primary="Phone"
-                    secondary={patient.phone}
-                  />
+                  <ListItemText primary="Phone" secondary={patient?.phone} />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
                     <CalendarToday />
                   </ListItemIcon>
-                  <ListItemText
-                    primary="Date of Birth"
-                    secondary={patient.dateOfBirth}
-                  />
+                  <ListItemText primary="Date of Birth" secondary={patient?.dateOfBirth} />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
                     <Person />
                   </ListItemIcon>
-                  <ListItemText
-                    primary="Gender"
-                    secondary={patient.gender}
-                  />
+                  <ListItemText primary="Gender" secondary={patient?.gender} />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
                     <LocationOn />
                   </ListItemIcon>
-                  <ListItemText
-                    primary="Address"
-                    secondary={patient.address}
-                  />
+                  <ListItemText primary="Address" secondary={patient?.address} />
                 </ListItem>
               </List>
 
@@ -272,23 +211,25 @@ const PatientProfilePage: React.FC = () => {
                 Emergency Contact
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {patient.emergencyContact}
+                {patient?.emergencyContact}
               </Typography>
 
               <Typography variant="subtitle2" gutterBottom sx={{ mt: 2 }}>
                 Insurance
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {patient.insurance}
+                {patient?.insurance}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Policy: {patient.policyNumber}
+                Policy: {patient?.policyNumber}
               </Typography>
             </CardContent>
           </Card>
+        </Box>
 
-          {/* Quick Actions */}
-          <Card sx={{ mt: 3 }}>
+        {/* Quick Actions - always in its own column on the left on md+ screens */}
+        <Box sx={{ gridColumn: { xs: '1', sm: '1', md: '2' } }}>
+          <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Quick Actions
@@ -312,7 +253,7 @@ const PatientProfilePage: React.FC = () => {
         </Box>
 
         {/* Main Content */}
-        <Box sx={{ gridColumn: { xs: '1', md: '2' } }}>
+        <Box sx={{ gridColumn: { xs: '1', sm: '1', md: '3' } }}>
           <Card>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs value={tabValue} onChange={handleTabChange}>

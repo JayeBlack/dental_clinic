@@ -11,6 +11,10 @@ import {
   Link,
   Divider,
   Grid,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
 } from '@mui/material';
 // @ts-ignore
 import { LocalHospital } from '@mui/icons-material';
@@ -25,6 +29,7 @@ const SignupPage: React.FC = () => {
     date_of_birth: '',
     nhis_number: '',
     address: '',
+    gender: '', // Add gender
     username: '',
     password: '',
     confirmPassword: '',
@@ -105,8 +110,9 @@ const SignupPage: React.FC = () => {
             )}
 
             <Box component="form" onSubmit={handleSubmit}>
-              <Grid container columns={12} spacing={2}>
-                <Grid sx={{ gridColumn: 'span 12' }}>
+              <Grid container spacing={2}>
+                {/* Left column */}
+                <div style={{ flex: 1, minWidth: 0 }}>
                   <TextField
                     fullWidth
                     label="Full Name"
@@ -114,9 +120,8 @@ const SignupPage: React.FC = () => {
                     value={formData.full_name}
                     onChange={handleChange}
                     required
+                    sx={{ mb: 2 }}
                   />
-                </Grid>
-                <Grid sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
                   <TextField
                     fullWidth
                     label="Email"
@@ -124,9 +129,8 @@ const SignupPage: React.FC = () => {
                     type="email"
                     value={formData.email}
                     onChange={handleChange}
+                    sx={{ mb: 2 }}
                   />
-                </Grid>
-                <Grid sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
                   <TextField
                     fullWidth
                     label="Phone Number"
@@ -134,9 +138,8 @@ const SignupPage: React.FC = () => {
                     value={formData.phone_number}
                     onChange={handleChange}
                     required
+                    sx={{ mb: 2 }}
                   />
-                </Grid>
-                <Grid sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
                   <TextField
                     fullWidth
                     label="Date of Birth"
@@ -145,9 +148,27 @@ const SignupPage: React.FC = () => {
                     value={formData.date_of_birth}
                     onChange={handleChange}
                     required
+                    InputLabelProps={{ shrink: true }}
+                    sx={{ mb: 2 }}
                   />
-                </Grid>
-                <Grid sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
+                  <FormControl fullWidth required sx={{ mb: 2 }}>
+                    <InputLabel id="gender-label">Gender</InputLabel>
+                    <Select
+                      labelId="gender-label"
+                      id="gender"
+                      name="gender"
+                      value={formData.gender}
+                      label="Gender"
+                      onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                    >
+                      <MenuItem value="male">Male</MenuItem>
+                      <MenuItem value="female">Female</MenuItem>
+                      <MenuItem value="other">Other</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+                {/* Right column */}
+                <div style={{ flex: 1, minWidth: 0 }}>
                   <TextField
                     fullWidth
                     label="NHIS Number"
@@ -155,9 +176,8 @@ const SignupPage: React.FC = () => {
                     value={formData.nhis_number}
                     onChange={handleChange}
                     required
+                    sx={{ mb: 2 }}
                   />
-                </Grid>
-                <Grid sx={{ gridColumn: 'span 12' }}>
                   <TextField
                     fullWidth
                     label="Address"
@@ -166,24 +186,16 @@ const SignupPage: React.FC = () => {
                     rows={2}
                     value={formData.address}
                     onChange={handleChange}
+                    sx={{ mb: 2 }}
                   />
-                </Grid>
-                <Grid sx={{ gridColumn: 'span 12' }}>
-                  <Divider sx={{ my: 2 }} />
-                  <Typography variant="h6" gutterBottom>
-                    Account Credentials
-                  </Typography>
-                </Grid>
-                <Grid sx={{ gridColumn: 'span 12' }}>
                   <TextField
                     fullWidth
                     label="Username (optional)"
                     name="username"
                     value={formData.username}
                     onChange={handleChange}
+                    sx={{ mb: 2 }}
                   />
-                </Grid>
-                <Grid sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
                   <TextField
                     fullWidth
                     label="Password"
@@ -192,9 +204,8 @@ const SignupPage: React.FC = () => {
                     value={formData.password}
                     onChange={handleChange}
                     required
+                    sx={{ mb: 2 }}
                   />
-                </Grid>
-                <Grid sx={{ gridColumn: { xs: 'span 12', sm: 'span 6' } }}>
                   <TextField
                     fullWidth
                     label="Confirm Password"
@@ -203,8 +214,9 @@ const SignupPage: React.FC = () => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     required
+                    sx={{ mb: 2 }}
                   />
-                </Grid>
+                </div>
               </Grid>
               <Button
                 type="submit"

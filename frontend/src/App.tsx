@@ -53,7 +53,7 @@ const App = () => (
             } />
             {/* Patient Profile */}
             <Route path="/patients/:id" element={
-              <ProtectedRoute allowedRoles={['admin', 'doctor', 'nurse']}>
+              <ProtectedRoute allowedRoles={['admin', 'doctor', 'nurse', 'patient']}>
                 <DashboardLayout>
                   <PatientProfilePage />
                 </DashboardLayout>
@@ -61,7 +61,7 @@ const App = () => (
             } />
             {/* Appointments */}
             <Route path="/appointments" element={
-              <ProtectedRoute allowedRoles={['admin', 'doctor', 'nurse', 'receptionist']}>
+              <ProtectedRoute allowedRoles={['admin', 'doctor', 'nurse', 'receptionist', 'patient']}>
                 <DashboardLayout>
                   <AppointmentsPage />
                 </DashboardLayout>
@@ -69,7 +69,7 @@ const App = () => (
             } />
             {/* Billing */}
             <Route path="/billing" element={
-              <ProtectedRoute allowedRoles={['admin']}>
+              <ProtectedRoute allowedRoles={['admin', 'patient']}>
                 <DashboardLayout>
                   <BillingPage />
                 </DashboardLayout>
@@ -93,7 +93,7 @@ const App = () => (
             } />
             {/* Settings */}
             <Route path="/settings" element={
-              <ProtectedRoute allowedRoles={['admin', 'doctor', 'nurse', 'receptionist']}>
+              <ProtectedRoute allowedRoles={['admin', 'doctor', 'nurse', 'receptionist', 'patient']}>
                 <DashboardLayout>
                   <SettingsPage />
                 </DashboardLayout>

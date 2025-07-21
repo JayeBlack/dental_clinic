@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   Box,
@@ -23,9 +22,9 @@ const LoginPage: React.FC = () => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [redirecting, setRedirecting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -40,8 +39,17 @@ const LoginPage: React.FC = () => {
     setLoading(true);
 
     try {
-      await login(formData.username, formData.password);
-      navigate('/dashboard');
+      // login returns a promise, but user state is not immediately updated
+      const userData = await login(formData.username, formData.password);
+      // Try to get user info from localStorage (set in AuthContext)
+      const storedUser = JSON.parse(localStorage.getItem('userData') || 'null');
+      if (storedUser && storedUser.role === 'patient') {
+        setRedirecting(true);
+        navigate(`/patients/${storedUser.id}`);
+      } else {
+        setRedirecting(true);
+        navigate('/dashboard');
+      }
     } catch (error: any) {
       setError(error.response?.data?.error || 'Invalid credentials');
     } finally {

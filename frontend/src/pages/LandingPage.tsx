@@ -121,7 +121,7 @@ const LandingPage: React.FC = () => {
                     px: 4,
                   }}
                 >
-                  Staff Login
+                  Login Here
                 </Button>
               </Box>
             </Grid>
@@ -223,7 +223,7 @@ const LandingPage: React.FC = () => {
             </Grid>
             <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: isMobile ? 'left' : 'right' }}>
               <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                © 2024 DentalCare Pro. All rights reserved.
+                © 2025 DentalCare Pro. All rights reserved.
               </Typography>
             </Grid>
           </Grid>
